@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>加盐加密示例</title>
+  </head>
+  <body>
+    <h1>加盐加密示例</h1>
+    <button id="encryptBtn">加密</button>
+    <button id="decryptBtn">解密</button>
+    <pre id="output"></pre>
+
+    <script>
+      // 生成随机盐
+      function generateSalt(length = 16) {
+        const array = new Uint8Array(length)
+        window.crypto.getRandomValues(array)
+        return array
+      }
+
+      // 派生密钥
+      async function deriveKey(password, salt) {
+        const enc = new TextEncoder()
+        const keyMaterial = await window.crypto.subtle.importKey(
+          'raw',
+          enc.encode(password),
+          { name: 'PBKDF2' },
+          false,
+          ['deriveBits', 'deriveKey']
+        )
+
+        return window.crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: 100000,
+            hash: 'SHA-256',
+          },
+          keyMaterial,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['encrypt', 'decrypt']
+        )
+      }
+
+      // 加密
+      async function encrypt(text, password) {
+        const salt = generateSalt()
+        const iv = window.crypto.getRandomValues(new Uint8Array(12)) // 生成随机初始化向量
+        const key = await deriveKey(password, salt)
+
+        const enc = new TextEncoder()
+        const ciphertext = await window.crypto.subtle.encrypt(
+          {
+            name: 'AES-GCM',
+            iv: iv,
+          },
+          key,
+          enc.encode(text)
+        )
+
+        // 转换为 Base64 字符串并合并为一个字符串
+        const saltStr = btoa(String.fromCharCode(...salt))
+        const ivStr = btoa(String.fromCharCode(...iv))
+        const ciphertextStr = btoa(String.fromCharCode(...new Uint8Array(ciphertext)))
+
+        return `${saltStr}:${ivStr}:${ciphertextStr}` // 使用冒号分隔
+      }
+
+      // 解密
+      async function decrypt(encryptedData, password) {
+        const [salt, iv, ciphertext] = encryptedData.split(':')
+        const saltArray = Uint8Array.from(atob(salt), (c) => c.charCodeAt(0))
+        const ivArray = Uint8Array.from(atob(iv), (c) => c.charCodeAt(0))
+        const ciphertextArray = Uint8Array.from(atob(ciphertext), (c) => c.charCodeAt(0))
+
+        const key = await deriveKey(password, saltArray)
+
+        const decrypted = await window.crypto.subtle.decrypt(
+          {
+            name: 'AES-GCM',
+            iv: ivArray,
+          },
+          key,
+          ciphertextArray
+        )
+
+        const dec = new TextDecoder()
+        return dec.decode(decrypted)
+      }
+
+      // 示例使用
+      document.getElementById('encryptBtn').onclick = async () => {
+        const password = prompt('请输入密码：')
+        const textToEncrypt = prompt('请输入要加密的文本：')
+
+        const encryptedData = await encrypt(textToEncrypt, password)
+        document.getElementById('output').textContent = encryptedData // 输出单个字符串
+      }
+
+      document.getElementById('decryptBtn').onclick = async () => {
+        const password = prompt('请输入密码：')
+        const encryptedData = document.getElementById('output').textContent
+
+        try {
+          const decryptedText = await decrypt(encryptedData, password)
+          alert('解密后的文本：' + decryptedText)
+        } catch (e) {
+          alert('解密失败，请检查密码和加密数据。')
+        }
+      }
+    </script>
+  </body>
+</html>

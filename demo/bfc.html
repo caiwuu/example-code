@@ -1,0 +1,146 @@
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<div id="app">
+  <div class="card">
+    <div class="left con">
+      <div class="title item">杭州通用5元券</div>
+      <div class="sub-title item">杭州通用杭州通用杭州通用杭州通用杭州通用杭州通用杭州通用杭州通用111111</div>
+    </div>
+    <div id="buy-btn" class="right con">
+      {{btnText}}
+    </div>
+  </div>
+</div>
+
+<script>
+  const { createApp, ref, reactive, onMounted } = Vue
+  console.log(ref, reactive, onMounted);
+  createApp({
+    setup () {
+      let btnText = ref('10s')
+      let n = 10
+      onMounted(() => {
+        const timmer = setInterval(() => {
+          if (n > 0) {
+            btnText.value = n + 's'
+            n--
+          } else {
+            btnText.value = '抢购'
+            clearInterval(timmer)
+          }
+        }, 1000)
+      })
+
+      return {
+        btnText
+      }
+    },
+    data () {
+      return {
+        btnText: '10',
+      }
+    },
+    // mounted () {
+    //   let n = 10
+    //   const timmer = setInterval(() => {
+    //     if (n > 0) {
+    //       this.btnText = n + 's'
+    //       n--
+    //     } else {
+    //       this.btnText = '抢购'
+    //       clearInterval(timmer)
+    //     }
+    //   }, 1000)
+    // }
+  }).mount('#app')
+
+
+  function query (list) {
+    let res = list
+    const ops = {
+      find (fn) {
+        res = res.filter(fn)
+        return ops
+      },
+      order (desc) {
+        res = res.sort((a, b) => desc ? b - a : a - b)
+        return ops
+      },
+      group (key) {
+        const groupMap = {}
+        res.forEach(ele => {
+          if (!groupMap[ele[key]]) {
+            groupMap[ele[key]] = [ele]
+          } else {
+            groupMap[ele[key]].push(ele)
+          }
+        })
+        res = Object.keys(groupMap).map(key => groupMap[key])
+        return ops
+      },
+      exec () {
+        return res
+      }
+    }
+    return ops
+  }
+
+  const data = [
+    { age: 12, happy: "study", sex: 1 },
+    { age: 11, happy: "study", sex: 1 },
+    { age: 16, happy: "study", sex: 1 },
+    { age: 22, happy: "333", sex: 1 },
+    { age: 10, happy: "study", sex: 1 },
+    { age: 10, happy: "www", sex: 0 },
+  ]
+  console.log(query(data).find(ele => ele.sex === 1).order("age").group("happy").exec());
+</script>
+<style>
+  html {
+    font-size: 100px;
+  }
+
+  .card {
+    height: 1.36rem;
+    width: 4.3rem;
+    background: #fff0f1;
+    padding-left: 0.3rem;
+    padding-right: 0.24rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.12rem;
+
+  }
+
+  .title {
+    font-size: 0.24rem;
+    font-weight: bold;
+  }
+
+  .sub-title {
+    font-size: 0.22rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .right {
+    font-size: 0.24rem;
+    width: 1.08rem;
+    height: 0.45rem;
+    border-radius: 0.08rem;
+    background-color: #f00;
+    line-height: 0.45rem;
+    text-align: center;
+    color: #fff;
+    font-size: 0.2rem;
+    cursor: pointer;
+  }
+
+  .con.right {
+    flex-shrink: 0;
+  }
+</style>

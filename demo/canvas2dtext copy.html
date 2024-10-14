@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    function createTextTexture(text, parameters = {}) {
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+
+      // 固定标签显示区域大小
+      const fontSize = parameters.fontSize || 64 // 字体大小（像素）
+      const fontFace = parameters.fontFace || 'Arial'
+
+      const textMetrics = context.measureText(text)
+
+      const textWidth = Math.ceil(textMetrics.width)
+
+      // 设置 Canvas 大小为两倍显示宽度，用于跑马灯效果
+      canvas.width = 100 * 2
+      canvas.height = 50
+      canvas.style.borderRadius = '12px'
+      // 设置背景
+      context.fillStyle = parameters.backgroundColor || 'rgba(100,0,0,1)'
+      context.fillRect(0, 0, canvas.width, canvas.height)
+      context.font = `${fontSize}px ${fontFace}`
+      context.textAlign = 'left' // 从左开始绘制
+      context.textBaseline = 'middle'
+
+      // 设置文本颜色
+
+      // 绘制文本两次，保证连续滚动
+      context.fillStyle = parameters.textColor || 'white'
+      context.fillText(text, 0, canvas.height / 2)
+
+      context.fillText(text, canvas.width / 2, canvas.height / 2)
+      // 创建纹
+
+      document.body.appendChild(canvas)
+    }
+
+    createTextTexture('123456789091000')
+  </script>
+</html>

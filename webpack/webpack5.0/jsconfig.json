@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "esnext", // 编译目标
+            "module": "esnext", // 使用 ES 模块
+                "baseUrl": "./", // 基础 URL
+                    "paths": {
+            "@/*": ["src/*"], // 设置路径别名
+                "vue": ["node_modules/vue/dist/vue.esm-bundler.js"] // 显式指定 Vue 的路径
+        },
+        "allowJs": true, // 允许编译 JavaScript 文件
+            "checkJs": false // 不对 JavaScript 文件进行类型检查
+    },
+    "include": [
+        "src/**/*" // 包含 src 文件夹下的所有文件
+    ]
+}

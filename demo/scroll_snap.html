@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item:nth-child(1) {
+            background: blueviolet;
+        }
+
+        .item:nth-child(2) {
+            background: rgb(182, 233, 17);
+        }
+
+        .item:nth-child(3) {
+            background: rgb(43, 226, 211);
+        }
+
+        .item:nth-child(4) {
+            background: rgb(248, 119, 129);
+        }
+
+        .item:nth-child(5) {
+            background: rgb(224, 162, 243);
+        }
+
+        .item:nth-child(6) {
+            background: rgb(129, 243, 172);
+        }
+
+        .item:nth-child(7) {
+            background: rgb(56, 101, 107);
+        }
+
+        .item {
+            flex-shrink: 0;
+            width: 300px;
+            height: 200px;
+            scroll-snap-align: center;
+            border-radius: 6px;
+            scroll-snap-stop: always;
+        }
+
+        .container {
+            scroll-snap-type: x proximity;
+            display: flex;
+            align-items: center;
+            flex-flow: row nowrap;
+            height: 220px;
+            width: 620px;
+            overflow-x: auto;
+            gap: 10px;
+            background: cornsilk;
+            padding: 0 10px;
+            scroll-padding-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+    </div>
+</body>
+
+</html>

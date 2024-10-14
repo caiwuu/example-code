@@ -1,0 +1,15 @@
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: blue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+
+  /* 使用后代选择器 */
+  &:hover {
+    background-color: darkblue;
+  }
+}

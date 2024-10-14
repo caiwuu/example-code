@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    function createTextTexture(text, parameters = {}) {
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+
+      // 设置字体样式
+      const fontSize = parameters.fontSize || 64
+      const fontFace = parameters.fontFace || 'Arial'
+      context.font = `${fontSize}px ${fontFace}`
+
+      // 计算文本宽度和高度
+      const textMetrics = context.measureText(text)
+
+      const textWidth = Math.ceil(textMetrics.width)
+
+      // 设置 Canvas 大小
+      canvas.width = 100 * 2 // 添加一些内边距
+      canvas.height = 50
+
+      // 重新设置字体样式以适应 Canvas 大小
+      context.font = `${fontSize}px ${fontFace}`
+      context.textAlign = 'left'
+      context.textBaseline = 'middle'
+
+      // 清空 Canvas
+      context.clearRect(0, 0, canvas.width, canvas.height)
+
+      // 设置文本颜色和背景透明度
+      const textColor = parameters.textColor || 'white'
+      const backgroundColor = parameters.backgroundColor || 'rgba(100,0,0,1)' // 透明背景
+      context.fillStyle = backgroundColor
+      context.fillRect(0, 0, canvas.width, canvas.height)
+      context.fillStyle = textColor
+
+      // 绘制文本
+      context.fillText(text, 0, canvas.height / 2)
+      context.fillText(text, canvas.width / 2, canvas.height / 2)
+
+      //   canvas.style.width = `${canvas.width / window.devicePixelRatio}px`
+      //   canvas.style.height = `${canvas.height / window.devicePixelRatio}px`
+      document.body.appendChild(canvas)
+    }
+
+    createTextTexture('123456789091000')
+  </script>
+</html>

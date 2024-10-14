@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    wwwww
+    <a id="testA" href="https://www.baidu.com">hhha</a>
+  </body>
+  <script>
+    testA.onclick = function (e) {
+      e.preventDefault()
+      window.history.pushState(null, null, '/baidu.com')
+    }
+  </script>
+</html>

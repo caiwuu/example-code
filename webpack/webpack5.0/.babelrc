@@ -1,0 +1,12 @@
+{
+    "presets": [
+      ["@babel/preset-env", {
+        "useBuiltIns": "usage",
+        "corejs": 3, // 使用 core-js 版本
+        "targets": {
+          "browsers": "> 0.25%, not dead" // 目标浏览器
+        }
+      }]
+    ]
+  }
+  
